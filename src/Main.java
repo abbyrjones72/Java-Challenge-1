@@ -207,7 +207,7 @@ public class Main {
                 sendNewMessage();
             } else {
                 id++;       // guarantee the id is unique for every message
-                Message newMessage = new Message(text, name, id);
+                Message newMessage = new Message(messageText, name, id);
 
             }
         } else {

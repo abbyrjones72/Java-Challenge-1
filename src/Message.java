@@ -4,6 +4,12 @@ public class Message {
     private String recipient;
     private int id;
 
+    /**
+     * Message instance that takes in
+     * @param text: String
+     * @param recipient: String
+     * @param id: int (a unique identifier that is static in Main.java)
+     */
     public Message(String text, String recipient, int id) {
         this.text = text;
         this.recipient = recipient;
@@ -28,6 +34,10 @@ public class Message {
         return recipient;
     }
 
+    /**
+     * Sets the recipient message
+     * @param recipient: String
+     */
     public void setRecipient(String recipient) {
         this.recipient = recipient;
     }

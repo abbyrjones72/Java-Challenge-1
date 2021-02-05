@@ -1,7 +1,4 @@
-import javax.xml.bind.SchemaOutputResolver;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -145,8 +142,8 @@ public class Main {
                 contacts.add(contact);
                 System.out.println(name + " added successfully.");
             }
+            showMainMenu();
         }
-        showMainMenu();
     }
 
     private static void manageMessages() {
@@ -165,25 +162,9 @@ public class Main {
                 break;
             default:
                 showMainMenu();
-                break;
         }
     }
 
-    private static void showAllMessages() {
-        ArrayList<Message> allMessages = new ArrayList<>();
-        for (Contact c : contacts) {
-            allMessages.addAll(c.getMessages());
-        }
-
-        if (allMessages.size() > 0) {
-            for (Message m : allMessages) {
-                m.getDetails();
-                System.out.println("*******************");
-            }
-        } else {
-            System.out.println("There are no messages.");
-        }
-    }
 
     private static void sendNewMessage() {
         System.out.println("Please enter the recipients name: ");
@@ -206,16 +187,41 @@ public class Main {
                 System.out.println("Please enter a valid message.");
                 sendNewMessage();
             } else {
-                id++;       // guarantee the id is unique for every message
+                id++;                                                       // guarantee the id is unique for every message
                 Message newMessage = new Message(messageText, name, id);
-
+                for(Contact c : contacts) {
+                    if(c.getName().equals(name)) {
+                        ArrayList<Message> newMessages = c.getMessages();   // copy the old list to the new
+                        newMessages.add(newMessage);                        // then add the new messages
+                        Contact currentContact = c;                         // assign currentContact to new c of contact
+                        currentContact.setMessages(newMessages);            // set the new message to the currentContact
+                        contacts.remove(c);                                 // remove old c from contacts to make way for the new currentContact with the new messages
+                        contacts.add(currentContact);                       // place the new contact in with the new messages
+                    }
+                }
             }
         } else {
             System.out.println("Contact does not exist.");
         }
+        showMainMenu();
     }
 
+    private static void showAllMessages() {
+        ArrayList<Message> allMessages = new ArrayList<>();
+        for (Contact c : contacts) {
+            allMessages.addAll(c.getMessages());
+        }
 
+        if (allMessages.size() > 0) {
+            for (Message m : allMessages) {
+                m.getDetails();
+                System.out.println("*******************");
+            }
+        } else {
+            System.out.println("There are no messages.");
+        }
+        showMainMenu();
+    }
 }
 
 

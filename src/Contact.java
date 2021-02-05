@@ -1,6 +1,4 @@
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
 
 public class Contact {
 
@@ -9,7 +7,13 @@ public class Contact {
     private String email;
     private ArrayList<Message> messages = new ArrayList<>();
 
-
+    /**
+     * A constructor to handle existing contacts.
+     * @param name
+     * @param number
+     * @param email
+     * @param messages This is only included for existing contacts
+     */
     public Contact(String name, String number, String email, ArrayList messages) {
         this.name = name;
         this.number = number;
@@ -17,6 +21,12 @@ public class Contact {
         this.messages = messages;
     }
 
+    /**
+     * A constructor to handle new contacts (i.e they don't yet have messages)
+     * @param name
+     * @param number
+     * @param email
+     */
     public Contact(String name, String number, String email) {
         this.name = name;
         this.number = number;

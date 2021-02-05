@@ -1,3 +1,5 @@
+import javax.xml.bind.SchemaOutputResolver;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -6,6 +8,7 @@ public class Main {
 
     private static ArrayList<Contact> contacts;
     private static Scanner sc;
+    private static int id = 0;
 
     public static void main(String[] args) {
 
@@ -14,14 +17,13 @@ public class Main {
         sc = new Scanner(System.in);
         int mainMenuChoice = sc.nextInt();
 
-        switch(mainMenuChoice) {
+        switch (mainMenuChoice) {
 
             case 1:
-                showManageContactsMenu();
+                manageContacts();
                 break;
             case 2:
-                showManageMessagesMenu();
-                mainMenuChoice = sc.nextInt();
+                manageMessages();
                 break;
             default:
                 break;
@@ -31,11 +33,11 @@ public class Main {
     private static void showMainMenu() {
         System.out.println("Greetings. Please select an option from the main menu:");
         System.out.println("\t1. Manage Contacts" +
-                           "\n\t2. Messages" +
-                           "\n\t3. Quit");
+                "\n\t2. Messages" +
+                "\n\t3. Quit");
     }
 
-    private static void showManageContactsMenu() {
+    private static void manageContacts() {
         System.out.println("Manage Contacts:");
         System.out.println("\t1. Show all contacts");
         System.out.println("\t2. Add a new contact");
@@ -44,7 +46,7 @@ public class Main {
         System.out.println("\t5. Back to previous menu");
         int contactChoice = sc.nextInt();
 
-        switch(contactChoice) {
+        switch (contactChoice) {
             case 1:
                 showAllContacts();
                 break;
@@ -58,33 +60,35 @@ public class Main {
                 deleteContact();
                 break;
             default:
-                showManageContactsMenu();
+                showMainMenu();
                 break;
         }
     }
 
     public static void showAllContacts() {
-        for(Contact c : contacts) {
+        for (Contact c : contacts) {
             c.getDetails();
+            System.out.println("************************");
         }
-        showManageContactsMenu();
+        showMainMenu();
     }
+
     private static void deleteContact() {
         System.out.println("Please enter the name: ");
         String name = sc.next();
 
-        if(name.equals("")) {
+        if (name.equals("")) {
             System.out.println("Invalid entry. Field(s) cannot be blank.");
             deleteContact();
         } else {
             boolean doesExist = false;
-            for(Contact c : contacts) {
-                if(c.getName().equals(name)) {
+            for (Contact c : contacts) {
+                if (c.getName().equals(name)) {
                     doesExist = true;
                     contacts.remove(c);
                 }
             }
-            if(!doesExist) {
+            if (!doesExist) {
                 System.out.println("Contact does not exist.");
             }
         }
@@ -94,18 +98,18 @@ public class Main {
     private static void searchContact() {
         System.out.println("Please enter the contact name.");
         String name = sc.next();
-        if(name.equals("")) {
+        if (name.equals("")) {
             System.out.println("Invalid entry. Field(s) cannot be blank.");
             searchContact();
         } else {
             boolean doesExist = false;
-            for(Contact c : contacts) {
-                if(c.getName().equals(name)) {
+            for (Contact c : contacts) {
+                if (c.getName().equals(name)) {
                     doesExist = true;
                     c.getDetails();
                 }
             }
-            if(!doesExist) {
+            if (!doesExist) {
                 System.out.println("Contact does not exist.");
                 searchContact();
             }
@@ -115,6 +119,7 @@ public class Main {
 
     private static void addNewContact() {
         System.out.println("Adding a new contact...");
+        System.out.println("***********************");
         System.out.println("Please enter the contact's name: ");
         String name = sc.next();
         System.out.println("Please enter the contact's number: ");
@@ -122,27 +127,95 @@ public class Main {
         System.out.println("Please enter the contact's email: ");
         String email = sc.next();
 
-        if(name.equals("") || number.equals("") || email.equals("")) {
+        if (name.equals("") || number.equals("") || email.equals("")) {
             System.out.println("Invalid entry. Field(s) cannot be blank.");
             addNewContact();
         } else {
-            Contact contact = new Contact(name, number, email);
-            contacts.add(contact);
+            boolean doesExist = false;
+            for (Contact c : contacts) {
+                if (c.getName().equals(name) && c.getNumber().equals(number) && c.getEmail().equals(email)) {
+                    doesExist = true;
+                }
+            }
+            if (doesExist) {
+                System.out.println("Contact already exists");
+                addNewContact();
+            } else {
+                Contact contact = new Contact(name, number, email);
+                contacts.add(contact);
+                System.out.println(name + " added successfully.");
+            }
         }
         showMainMenu();
     }
 
-    private static void showManageMessagesMenu() {
+    private static void manageMessages() {
         System.out.println("Messages:");
         System.out.println("\t1. See the list of all messages");
         System.out.println("\t2. Send a new message");
         System.out.println("\t3. Back to previous menu");
         int messageChoice = sc.nextInt();
 
-        switch(messageChoice) {
+        switch (messageChoice) {
+            case 1:
+                showAllMessages();
+                break;
+            case 2:
+                sendNewMessage();
+                break;
+            default:
+                showMainMenu();
+                break;
+        }
+    }
 
+    private static void showAllMessages() {
+        ArrayList<Message> allMessages = new ArrayList<>();
+        for (Contact c : contacts) {
+            allMessages.addAll(c.getMessages());
+        }
+
+        if (allMessages.size() > 0) {
+            for (Message m : allMessages) {
+                m.getDetails();
+                System.out.println("*******************");
+            }
+        } else {
+            System.out.println("There are no messages.");
+        }
+    }
+
+    private static void sendNewMessage() {
+        System.out.println("Please enter the recipients name: ");
+        String name = sc.next();
+        boolean doesExist = false;
+        if(name.equals("")) {
+            System.out.println("Please enter the name of the contact.");
+            sendNewMessage();
+        } else {
+
+            for(Contact c : contacts) {
+                if(c.getName().equals(name));
+                doesExist = true;
+            }
+        }
+        if(doesExist) {
+            System.out.println("Please enter the message: ");
+            String messageText = sc.next();
+            if(messageText.equals("")) {
+                System.out.println("Please enter a valid message.");
+                sendNewMessage();
+            } else {
+                id++;       // guarantee the id is unique for every message
+                Message newMessage = new Message(text, name, id);
+
+            }
+        } else {
+            System.out.println("Contact does not exist.");
         }
     }
 
 
 }
+
+

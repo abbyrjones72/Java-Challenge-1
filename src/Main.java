@@ -10,7 +10,7 @@ public class Main {
     public static void main(String[] args) {
 
         contacts = new ArrayList<>();
-        showMainMenu();
+        showInitialOptions();
         sc = new Scanner(System.in);
         int mainMenuChoice = sc.nextInt();
 
@@ -23,11 +23,12 @@ public class Main {
                 manageMessages();
                 break;
             default:
+                showInitialOptions();
                 break;
         }
     }
 
-    private static void showMainMenu() {
+    private static void showInitialOptions() {
         System.out.println("Greetings. Please select an option from the main menu:");
         System.out.println("\t1. Manage Contacts" +
                 "\n\t2. Messages" +
@@ -57,7 +58,7 @@ public class Main {
                 deleteContact();
                 break;
             default:
-                showMainMenu();
+                showInitialOptions();
                 break;
         }
     }
@@ -67,7 +68,7 @@ public class Main {
             c.getDetails();
             System.out.println("************************");
         }
-        showMainMenu();
+        showInitialOptions();
     }
 
     private static void deleteContact() {
@@ -89,7 +90,7 @@ public class Main {
                 System.out.println("Contact does not exist.");
             }
         }
-        showMainMenu();
+        showInitialOptions();
     }
 
     private static void searchContact() {
@@ -111,7 +112,7 @@ public class Main {
                 searchContact();
             }
         }
-        showMainMenu();
+        showInitialOptions();
     }
 
     private static void addNewContact() {
@@ -142,8 +143,9 @@ public class Main {
                 contacts.add(contact);
                 System.out.println(name + " added successfully.");
             }
-            showMainMenu();
+
         }
+        showInitialOptions();
     }
 
     private static void manageMessages() {
@@ -161,7 +163,7 @@ public class Main {
                 sendNewMessage();
                 break;
             default:
-                showMainMenu();
+                showInitialOptions();
         }
     }
 
@@ -203,7 +205,7 @@ public class Main {
         } else {
             System.out.println("Contact does not exist.");
         }
-        showMainMenu();
+        showInitialOptions();
     }
 
     private static void showAllMessages() {
@@ -220,7 +222,7 @@ public class Main {
         } else {
             System.out.println("There are no messages.");
         }
-        showMainMenu();
+        showInitialOptions();
     }
 }
 
